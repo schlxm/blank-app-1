@@ -71,7 +71,7 @@ with tab1:
     deadline_str = deadline_date.strftime("%m/%d/%Y")
 
     lines = []
-    lines.append(f"• SHOW READY: {show_ready_str} at {venue}.")
+    lines.append(f"• SHOW READY: {show_ready_str} ({venue}).")
 
     # Audio Logic
     if mics_on:
@@ -95,7 +95,7 @@ with tab1:
         if clicker_req:
             lines.append("• ACCESSORY: Wireless Slide Advancer provided.")
         
-        # Spatial/Power/Input
+        # Spatial/Power/Input Logic
         power_note = "Power and HDMI provided"
         if pres_src == "Ours":
             lines.append(f"• MEDIA: Internal Playback (Files due by {deadline_str}). {power_note} at device location.")
@@ -117,26 +117,32 @@ with tab1:
     st.caption("Copy and paste the block above directly into the PEF.")
 
 with tab2:
-    st.header("Guidelines")
-    
+    # 1. Music
     st.subheader("1. Music")
     st.write('**Ask:** "Would you like background music? We have curated playlists, or you can share a Spotify link with us."')
     st.info("Note: At this time, we only support Spotify for custom playlists. Due 7 days prior.")
 
+    # 2. Movement
     st.subheader("2. Movement")
-    st.write('**Ask:** "Would your presenter like to move around while speaking? We can provide a headset and a wireless slide clicker so you aren\'t tethered to one location."')
-    st.info("Note: Choosing a headset mandates a Tech and a Tech Table.")
+    st.write('**Ask:** "Would your presenter like to move around while speaking? We can provide a wireless headset so you aren\'t tethered to the podium."')
+    st.info("Note: Headset mics require a Tech and a Tech Table station.")
 
+    # 3. Device Location
     st.subheader("3. Device Location")
-    st.write('**Ask:** "Where would you prefer the laptop (or other presentation device) to live?"')
+    st.write('**Ask:** "Where would you prefer the presentation source to be located?"')
     st.markdown("""
-    * **If Podium:** "We will provide power and HDMI connection for your convenience. Does your device have a standard HDMI port, or should we have a specific adapter ready for you?"
-    * **If No Preference:** "I recommend our tech table. It’s the most elegant look for the room and ensures our tech can manage everything seamlessly behind the scenes."
+    * **If Podium:** "We will provide power and HDMI for your convenience. Does your device have a standard HDMI port, or should we have an adapter ready for you?"
+    * **If No Preference:** "I recommend our tech table. It maintains the cleanest room aesthetic and ensures our tech can manage transitions seamlessly behind the scenes."
     """)
 
-    st.info("Note: The tech table provides a central station for the tech to perform active event management—including audio leveling, video switching, and transition timing—without intruding on the presentation space.")
+    st.info("Note: The tech table provides a central station for active event management—including audio leveling and transition timing—without intruding on the presentation space.")
 
-    st.subheader("4. Deadlines")
-    st.write('**Say:** "To ensure your event runs flawlessly, we ask for all presentational media (slides, video, and custom Spotify playlists) to be delivered 7 days before the event for testing on our devices. If media is to be played from a client device, we instead ask for the device(s) to arrive at the venue 1 hour before the event for testing."')
-    st.write('**Say:** "For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability."')
+    # 4. Testing & Media
+    st.subheader("4. Testing & Media")
+    st.write('**Ask:** "To ensure a flawless presentation, would you prefer to use our house dedicated playback system or your own laptop?"')
+    st.markdown("""
+    * **If using Ours:** **Say:** "Great. We just need your media 7 days before the event so we can pre-load and test everything for you."
+    * **If using Yours:** **Say:** "No problem. We’ll just need you and your device here 1 hour before the event so we can verify the signal path together."
+    """)
+    st.info("Note: For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.")
     
