@@ -19,10 +19,10 @@ start_time = st.sidebar.time_input("Event Start Time", datetime.time(18, 0))
 venue = st.sidebar.selectbox("Venue Location", list(venue_hardware.keys()))
 
 # 3. Main Interface Tabs
-tab1, tab2 = st.tabs(["PEF Data", "Discovery Guidelines"])
+tab1, tab2 = st.tabs(["PEF Data", "Discovery"])
 
 with tab1:
-    st.title("PEF Technical Generator")
+    st.title("Tech Selector")
     
     col1, col2 = st.columns(2)
     with col1:
@@ -35,7 +35,6 @@ with tab1:
         laptop_src = st.radio("Laptop Source", ["Theirs", "Ours"])
         laptop_loc_choice = st.selectbox("Preferred Laptop Location", ["Podium", "Tech Table", "Other"])
         
-        # Logic for "Other" fillable field
         if laptop_loc_choice == "Other":
             laptop_loc = st.text_input("Enter Location Description", placeholder="e.g. Front Row Center")
             if not laptop_loc:
@@ -100,7 +99,7 @@ with tab1:
     st.caption("Copy and paste the block above directly into the PEF.")
 
 with tab2:
-    st.header("Discovery Guidelines")
+    st.header("Guidelines")
     
     st.subheader("1. Music")
     st.write('**Ask:** "Would you like background music? We have curated playlists, or you can share a Spotify link with us."')
@@ -110,15 +109,21 @@ with tab2:
     st.write('**Ask:** "Would your presenter like to move around while speaking? We can provide a headset and a wireless slide clicker so you aren\'t tethered to one location."')
     st.info("Note: Choosing a headset mandates a Tech and a Tech Table.")
 
-    st.subheader("3. Device Location & Hardware")
+    st.subheader("3. Device Location")
     st.write('**Ask:** "Where would you prefer the laptop (or other presentation device) to live?"')
     st.markdown("""
     * **If Podium:** "We will provide power and HDMI connection for your convenience. Does your device have a standard HDMI port, or should we have a specific adapter ready for you?"
     * **If No Preference:** "I recommend our tech table. It’s the most elegant look for the room and ensures our tech can manage everything seamlessly behind the scenes."
     """)
 
-    st.subheader("4. The Quality Guarantee (Missed Deadlines)")
-    st.write('**Script:** "To ensure your event runs flawlessly, we ask for all media and testing to be completed by the 7-day deadline. For anything provided after that window, our team will provide a \'best effort\' integration to maintain the highest quality standards for your program."')
+    st.subheader("4. Deadlines")
+    st.write("""
+    To ensure your event runs flawlessly, we ask for all presentational media (slides, video, and custom Spotify playlists) 
+    to be delivered 7 days before the event for testing on our devices. If media is to be played from a client device, 
+    we instead ask for the device(s) to arrive at the venue 1 hour before the event for testing.
+    
+    For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.
+    """)
     
     st.markdown("---")
     st.info("The tech table provides a central station for the tech to perform active event management—including audio leveling, video switching, and transition timing—without intruding on the presentation space.")
