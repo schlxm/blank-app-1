@@ -19,11 +19,9 @@ start_time = st.sidebar.time_input("Event Start Time", datetime.time(18, 0))
 venue = st.sidebar.selectbox("Venue Location", list(venue_hardware.keys()))
 
 # 3. Main Interface Tabs
-tab1, tab2 = st.tabs(["PEF Data", "Discovery"])
+tab1, tab2 = st.tabs(["Tech Selector", "Discovery Guidelines"])
 
 with tab1:
-    st.title("Tech Selector")
-    
     # --- AUDIO SECTION ---
     st.header("Audio Setup")
     col_a1, col_a2 = st.columns(2)
@@ -114,7 +112,7 @@ with tab1:
         lines.append("• SPATIAL: Tech Table required for Tech station.")
 
     # --- OUTPUT ---
-    st.subheader("PEF Output")
+    st.subheader("PEF Data")
     st.code("\n".join(lines), language="text")
     st.caption("Copy and paste the block above directly into the PEF.")
 
@@ -139,10 +137,6 @@ with tab2:
     st.info("Note: The tech table provides a central station for the tech to perform active event management—including audio leveling, video switching, and transition timing—without intruding on the presentation space.")
 
     st.subheader("4. Deadlines")
-    st.write("""
-    To ensure your event runs flawlessly, we ask for all presentational media (slides, video, and custom Spotify playlists) 
-    to be delivered 7 days before the event for testing on our devices. If media is to be played from a client device, 
-    we instead ask for the device(s) to arrive at the venue 1 hour before the event for testing.
+    st.write('**Say:** "To ensure your event runs flawlessly, we ask for all presentational media (slides, video, and custom Spotify playlists) to be delivered 7 days before the event for testing on our devices. If media is to be played from a client device, we instead ask for the device(s) to arrive at the venue 1 hour before the event for testing."')
+    st.write('**Say:** "For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability."')
     
-    For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.
-    """)
