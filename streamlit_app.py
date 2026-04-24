@@ -3,11 +3,6 @@ import datetime
 
 # 1. Configuration & Venue Mapping
 st.set_page_config(page_title="AV Intake Tool", page_icon="🎙️")
-import streamlit as st
-import datetime
-
-# 1. Configuration & Venue Mapping
-st.set_page_config(page_title="AV Intake Tool", page_icon="🎙️")
 
 venue_hardware = {
     "Great Hall": "85\" Rolling TV",
@@ -114,5 +109,4 @@ with tab2:
     * **If No Preference (The Upsell):** "I recommend our 4ft Tech Table. It’s the most elegant look for the room and ensures our technician can manage everything seamlessly behind the scenes."
     """)
     
-    st.info("Technician Justification (Internal Only): The 4ft Table provides a 'home base' for the tech to manage audio levels and Spotify transitions without interrupting t
-    he event flow.")
+    st.info("Technician Justification (Internal Only): The 4ft Table provides a 'home base' for the tech to manage audio levels and Spotify transitions without interrupting the event flow.")
