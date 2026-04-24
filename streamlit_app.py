@@ -113,5 +113,18 @@ with tab2:
     st.write('**Ask:** "Where would you prefer the laptop (or other presentation device) to live?"')
     st.markdown("""
     * **If Podium:** "We will provide power and HDMI connection for your convenience. Does your device have a standard HDMI port, or should we have a specific adapter ready for you?"
-    * **If No Preference:** "I recommend our tech table. It’s the most elegant look for the 
-    room and ensures
+    * **If No Preference:** "I recommend our tech table. It’s the most elegant look for the room and ensures our tech can manage everything seamlessly behind the scenes."
+    """)
+
+    # Relocated Tech Table Note
+    st.info("The tech table provides a central station for the tech to perform active event management—including audio leveling, video switching, and transition timing—without intruding on the presentation space.")
+
+    st.subheader("4. Deadlines")
+    st.write("""
+    To ensure your event runs flawlessly, we ask for all presentational media (slides, video, and custom Spotify playlists) 
+    to be delivered 7 days before the event for testing on our devices. If media is to be played from a client device, 
+    we instead ask for the device(s) to arrive at the venue 1 hour before the event for testing.
+    
+    For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.
+    """)
+    
