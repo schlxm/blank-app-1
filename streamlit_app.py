@@ -103,12 +103,13 @@ with tab1:
             adapter_note = " (Include USB-C adapter at Podium)" if laptop_loc == "Podium" else ""
             lines.append(f"• INPUT: Client Device ({laptop_loc}). Tech must verify signal path. {power_note}{adapter_note}.")
 
-    # Spatial / Tech Table Logic
-    needs_tech_table = tech_req
-    if mics_on and mic_type == "Headset": needs_tech_table = True
-    if visual_on and laptop_loc_choice == "Other": needs_tech_table = True
-    
-    if needs_tech_table:
+    # Personnel Logic
+    final_personnel_req = tech_req
+    if mics_on and mic_type == "Headset": final_personnel_req = True
+    if visual_on and laptop_loc_choice == "Other": final_personnel_req = True
+
+    if final_personnel_req:
+        lines.append("• PERSONNEL: Tech On Site.")
         lines.append("• SPATIAL: Tech Table required for Tech station.")
 
     # --- OUTPUT ---
