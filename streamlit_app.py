@@ -76,9 +76,14 @@ with tab1:
 
     st.divider()
 
-    # --- PERSONNEL SECTION ---
-    st.header("Personnel & Support")
+    # --- EXTRA SUPPORT SECTION ---
+    st.header("Extra Support")
     tech_req = st.checkbox("Technician On Site?")
+    
+    # Gatekeeper Flags
+    st.write("**Specialized Equipment**")
+    second_screen = st.checkbox("Second Screen")
+    lapel_mics = st.checkbox("Lapel Mics")
 
     # --- LOGIC ENGINE ---
     dt_start = datetime.datetime.combine(event_date, start_time)
@@ -90,6 +95,9 @@ with tab1:
     # Secure counts to 0 if toggled off
     handheld_count = st.session_state.handhelds if mics_on else 0
     headset_count = st.session_state.headsets if mics_on else 0
+
+    # Gatekeeper evaluation
+    requires_tech_approval = second_screen or lapel_mics
 
     # Personnel Logic calculated first
     final_tech_req = tech_req
@@ -159,8 +167,13 @@ with tab1:
 
     # --- OUTPUT ---
     st.subheader("PEF Data")
-    st.code("\n".join(lines), language="text")
-    st.caption("Copy and paste the block above directly into the PEF.")
+    
+    # The Gatekeeper Check
+    if requires_tech_approval:
+        st.error("### STATUS: PENDING TECH APPROVAL\nSpecialized gear or routing requested (e.g., Second Screen, Lapel Mics). **Call Tech to resolve before finalizing PEF.**")
+    else:
+        st.code("\n".join(lines), language="text")
+        st.caption("Copy and paste the block above directly into the PEF.")
 
 with tab2:
     # 1. Music
@@ -191,4 +204,3 @@ with tab2:
     * **If using Yours:** **Say:** "No problem. We’ll just need you and your device here 1 hour before the event so we can verify the signal path together."
     """)
     st.info("Note: For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.")
-    
