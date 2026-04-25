@@ -1,6 +1,13 @@
 import streamlit as st
 import datetime
 
+# --- INITIALIZE SESSION STATE ---
+if 'handhelds' not in st.session_state:
+    st.session_state.handhelds = 0
+if 'headsets' not in st.session_state:
+    st.session_state.headsets = 0
+MAX_WIRELESS = 4
+
 # 1. Configuration & Venue Mapping
 st.set_page_config(page_title="AV Intake Tool", page_icon="🎙️")
 
@@ -25,6 +32,7 @@ with tab1:
     # --- AUDIO SECTION ---
     st.header("Audio Setup")
     col_a1, col_a2 = st.columns(2)
+    
     with col_a1:
         bgm_on = st.toggle("Include Background Music (BGM)?", value=True)
         if bgm_on:
@@ -34,7 +42,15 @@ with tab1:
     with col_a2:
         mics_on = st.toggle("Include Microphones?", value=False)
         if mics_on:
-            mic_type = st.selectbox("Microphone Type", ["Handheld", "Podium", "Headset"])
+            st.write("**Wireless Selection (Max 4)**")
+            max_handheld = MAX_WIRELESS - st.session_state.headsets
+            max_headset = MAX_WIRELESS - st.session_state.handhelds
+            
+            st.number_input("Handheld Mics", min_value=0, max_value=max_handheld, key='handhelds')
+            st.number_input("Headset Mics", min_value=0, max_value=max_headset, key='headsets')
+            podium_on = st.checkbox("Podium Mic (Max 1)")
+        else:
+            podium_on = False
 
     st.divider()
 
@@ -70,50 +86,68 @@ with tab1:
     deadline_date = event_date - datetime.timedelta(days=7)
     deadline_str = deadline_date.strftime("%m/%d/%Y")
 
-    lines = []
-    lines.append(f"• SHOW READY: {show_ready_str} ({venue}).")
+    # Secure counts to 0 if toggled off
+    handheld_count = st.session_state.handhelds if mics_on else 0
+    headset_count = st.session_state.headsets if mics_on else 0
 
-    # Audio Logic
-    if mics_on:
-        if mic_type == "Headset":
-            lines.append("• AUDIO: Headset Microphone (Technician On Site Required).")
-        else:
-            lines.append(f"• AUDIO: {mic_type.capitalize()} configuration.")
+    lines = []
+    
+    # Logistics Stack
+    lines.append("=== LOGISTICS ===")
+    lines.append(f"SHOW READY:\n{show_ready_str} ({venue})")
+
+    # Audio Stack
+    lines.append("\n=== AUDIO ===")
+    if mics_on and (handheld_count > 0 or headset_count > 0 or podium_on):
+        mic_details = []
+        if handheld_count > 0: mic_details.append(f"{handheld_count}x Handheld")
+        if headset_count > 0: mic_details.append(f"{headset_count}x Headset")
+        if podium_on: mic_details.append("1x Podium")
+        lines.append("Microphones:\n" + ", ".join(mic_details))
+    else:
+        lines.append("Microphones:\nNone")
     
     if bgm_on:
         if "Internal" in music_choice:
-            lines.append(f"• MUSIC: Internal Playlist - {music_choice.split(' (')[0]}.")
+            lines.append(f"Music:\nInternal Playlist - {music_choice.split(' (')[0]}")
         else:
-            lines.append(f"• MUSIC: Client Spotify Link (Link due by {deadline_str}).")
+            lines.append(f"Music:\nClient Spotify Link (Due {deadline_str})")
     else:
-        lines.append("• MUSIC: No background music requested.")
+        lines.append("Music:\nNo background music requested")
 
-    # Visual Logic
+    # Visual Stack
+    lines.append("\n=== VISUAL ===")
     if visual_on:
         current_screen = venue_hardware.get(venue)
-        lines.append(f"• VISUAL: {venue} - {current_screen}.")
-        if clicker_req:
-            lines.append("• ACCESSORY: Wireless Slide Advancer provided.")
+        lines.append(f"Display:\n{venue} - {current_screen}")
         
-        # Spatial/Power/Input Logic
         power_note = "Power and HDMI provided"
         if pres_src == "Ours":
-            lines.append(f"• MEDIA: Internal Playback (Files due by {deadline_str}). {power_note} at device location.")
+            lines.append(f"Source:\nInternal Playback (Files due {deadline_str})\n{power_note} at device location.")
         else:
-            adapter_note = " (Include USB-C adapter at Podium)" if laptop_loc == "Podium" else ""
-            lines.append(f"• INPUT: Client Device ({laptop_loc}). Tech must verify signal path. {power_note}{adapter_note}.")
+            adapter_note = "\n(Include USB-C adapter at Podium)" if laptop_loc == "Podium" else ""
+            lines.append(f"Source:\nClient Device ({laptop_loc})\nTech must verify signal path. {power_note}.{adapter_note}")
+            
+        if clicker_req:
+            lines.append("Accessory:\nWireless Slide Advancer provided.")
+    else:
+        lines.append("Visual:\nNone requested")
 
-    # Personnel Logic
+    # Personnel Logic & Stack
     final_personnel_req = tech_req
-    if mics_on and mic_type == "Headset": final_personnel_req = True
+    if mics_on and headset_count > 0: final_personnel_req = True
     if visual_on and laptop_loc_choice == "Other": final_personnel_req = True
 
+    lines.append("\n=== PERSONNEL & SUPPORT ===")
     if final_personnel_req:
-        lines.append("• PERSONNEL: Tech On Site.")
-        lines.append("• SPATIAL: Tech Table required for Tech station.")
+        lines.append("Personnel:\nTech On Site")
+        lines.append("Spatial:\nTech Table required for Tech station")
+    else:
+        lines.append("Personnel:\nNone requested/required")
 
     # --- OUTPUT ---
     st.subheader("PEF Data")
+    # Generating plain text inside a code block for easy copying
     st.code("\n".join(lines), language="text")
     st.caption("Copy and paste the block above directly into the PEF.")
 
