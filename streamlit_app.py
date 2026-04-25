@@ -42,13 +42,13 @@ with tab1:
     with col_a2:
         mics_on = st.toggle("Include Microphones?", value=False)
         if mics_on:
-            st.write("**Wireless Selection (Max 4)**")
+            st.write("**Wireless Selection**")
             max_handheld = MAX_WIRELESS - st.session_state.headsets
             max_headset = MAX_WIRELESS - st.session_state.handhelds
             
             st.number_input("Handheld Mics", min_value=0, max_value=max_handheld, key='handhelds')
             st.number_input("Headset Mics", min_value=0, max_value=max_headset, key='headsets')
-            podium_on = st.checkbox("Podium Mic (Max 1)")
+            podium_on = st.checkbox("Podium Mic")
         else:
             podium_on = False
 
@@ -134,20 +134,32 @@ with tab1:
         lines.append("Visual:\nNone requested")
 
     # Personnel Logic & Stack
-    final_personnel_req = tech_req
-    if mics_on and headset_count > 0: final_personnel_req = True
-    if visual_on and laptop_loc_choice == "Other": final_personnel_req = True
+    final_tech_req = tech_req
+
+    if mics_on and headset_count > 0:
+        final_tech_req = True
+            
+    if visual_on and laptop_loc_choice == "Other":
+        final_tech_req = True
+
+    # Determine if Tech Table is needed based on final Tech requirement
+    final_table_req = False
+    if final_tech_req:
+        final_table_req = True
+        # Apply the special room exception
+        if venue in ["Activity Hall", "Parlor", "Great Hall"] and not visual_on:
+            final_table_req = False
 
     lines.append("\n=== PERSONNEL & SUPPORT ===")
-    if final_personnel_req:
+    if final_tech_req:
         lines.append("Personnel:\nTech On Site")
-        lines.append("Spatial:\nTech Table required for Tech station")
+        if final_table_req:
+            lines.append("Spatial:\nTech Table")
     else:
         lines.append("Personnel:\nNone requested/required")
 
     # --- OUTPUT ---
     st.subheader("PEF Data")
-    # Generating plain text inside a code block for easy copying
     st.code("\n".join(lines), language="text")
     st.caption("Copy and paste the block above directly into the PEF.")
 
