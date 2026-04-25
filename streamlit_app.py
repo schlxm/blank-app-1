@@ -34,7 +34,8 @@ with tab1:
     col_a1, col_a2 = st.columns(2)
     
     with col_a1:
-        bgm_on = st.toggle("Include Background Music (BGM)?", value=True)
+        # BGM default set to False for a clean slate
+        bgm_on = st.toggle("Include Background Music (BGM)?", value=False)
         if bgm_on:
             music_choice = st.selectbox("Playlist Selection", 
                 ["Cocktail Jazz (Internal)", "Lofi Beats (Internal)", "Acoustic Instrumental (Internal)", "Client Provided (Spotify Link Only)"])
@@ -90,11 +91,34 @@ with tab1:
     handheld_count = st.session_state.handhelds if mics_on else 0
     headset_count = st.session_state.headsets if mics_on else 0
 
+    # Personnel Logic calculated first
+    final_tech_req = tech_req
+
+    if mics_on and headset_count > 0:
+        final_tech_req = True
+            
+    if visual_on and laptop_loc_choice == "Other":
+        final_tech_req = True
+
+    # Determine if Tech Table is needed based on final Tech requirement
+    final_table_req = False
+    if final_tech_req:
+        final_table_req = True
+        # Apply the special room exception
+        if venue in ["Activity Hall", "Parlor", "Great Hall"] and not visual_on:
+            final_table_req = False
+
     lines = []
     
-    # Logistics Stack
-    lines.append("=== LOGISTICS ===")
+    # Logistics & Support Stack (Combined at the top)
+    lines.append("=== LOGISTICS & SUPPORT ===")
     lines.append(f"SHOW READY:\n{show_ready_str} ({venue})")
+    if final_tech_req:
+        lines.append("Personnel:\nTech On Site")
+        if final_table_req:
+            lines.append("Spatial:\nTech Table")
+    else:
+        lines.append("Personnel:\nNone requested/required")
 
     # Audio Stack
     lines.append("\n=== AUDIO ===")
@@ -132,31 +156,6 @@ with tab1:
             lines.append("Accessory:\nWireless Slide Advancer provided.")
     else:
         lines.append("Visual:\nNone requested")
-
-    # Personnel Logic & Stack
-    final_tech_req = tech_req
-
-    if mics_on and headset_count > 0:
-        final_tech_req = True
-            
-    if visual_on and laptop_loc_choice == "Other":
-        final_tech_req = True
-
-    # Determine if Tech Table is needed based on final Tech requirement
-    final_table_req = False
-    if final_tech_req:
-        final_table_req = True
-        # Apply the special room exception
-        if venue in ["Activity Hall", "Parlor", "Great Hall"] and not visual_on:
-            final_table_req = False
-
-    lines.append("\n=== PERSONNEL & SUPPORT ===")
-    if final_tech_req:
-        lines.append("Personnel:\nTech On Site")
-        if final_table_req:
-            lines.append("Spatial:\nTech Table")
-    else:
-        lines.append("Personnel:\nNone requested/required")
 
     # --- OUTPUT ---
     st.subheader("PEF Data")
