@@ -118,3 +118,98 @@ with tab1:
         final_table_req = True
         # Apply the special room exception
         if venue in ["Activity Hall", "Parlor", "Great Hall"] and not visual_on:
+            final_table_req = False
+
+    lines = []
+    
+    # Logistics & Support Stack (Combined at the top)
+    lines.append("=== LOGISTICS & SUPPORT ===")
+    lines.append(f"SHOW READY:\n{show_ready_str} ({venue})")
+  
+    if final_tech_req:
+        lines.append("Personnel:\nTech On Site")
+        if final_table_req:
+            lines.append("Spatial:\nTech Table")
+    else:
+        lines.append("Personnel:\nNone requested/required")
+
+    # Audio Stack
+    lines.append("\n=== AUDIO ===")
+    if mics_on and (handheld_count > 0 or headset_count > 0 or podium_on):
+        mic_details = []
+        if handheld_count > 0: mic_details.append(f"{handheld_count}x Handheld")
+  
+        if headset_count > 0: mic_details.append(f"{headset_count}x Headset")
+        if podium_on: mic_details.append("1x Podium")
+        lines.append("Microphones:\n" + ", ".join(mic_details))
+    else:
+        lines.append("Microphones:\nNone")
+    
+    if bgm_on:
+        if "Internal" in music_choice:
+            lines.append(f"Music:\nInternal Playlist - {music_choice.split(' (')[0]}")
+        else:
+           
+            lines.append(f"Music:\nClient Spotify Link (Due {deadline_str})")
+    else:
+        lines.append("Music:\nNo background music requested")
+
+    # Visual Stack
+    lines.append("\n=== VISUAL ===")
+    if visual_on:
+        current_screen = venue_hardware.get(venue)
+        lines.append(f"Display:\n{venue} - {current_screen}")
+        
+        power_note = "Power and HDMI provided"
+        if pres_src == "Ours":
+           
+            lines.append(f"Source:\nInternal Playback (Files due {deadline_str})\n{power_note} at device location.")
+        else:
+            adapter_note = "\n(Include USB-C adapter at Podium)" if laptop_loc == "Podium" else ""
+            lines.append(f"Source:\nClient Device ({laptop_loc})\nTech must verify signal path. {power_note}.{adapter_note}")
+            
+        if clicker_req:
+            lines.append("Accessory:\nWireless Slide Advancer provided.")
+    else:
+        lines.append("Visual:\nNone requested")
+
+    # --- OUTPUT ---
+    st.subheader("PEF Data")
+    
+    # The Gatekeeper Check
+    if requires_tech_approval:
+        st.error("### STATUS: PENDING TECH APPROVAL\nEquipment or routing requested (e.g., Second Screen, Lapel Mics). **Call Tech to resolve before finalizing PEF.**")
+    else:
+        st.code("\n".join(lines), language="text")
+        st.caption("Copy and paste the block above directly into the PEF.")
+
+with tab2:
+    # 1. Music
+    st.subheader("1. Music")
+    st.write('**Ask:** "Would you like background music? We have curated playlists, or you can share a Spotify link with us."')
+    st.info("Note: At this time, we only support Spotify for custom playlists. Due 7 days prior.")
+
+    # 2. Presenter Location
+    st.subheader("2. Presenter Location")
+  
+    st.write('**Ask:** "Would your presenter like to move around while speaking? We can provide a wireless headset so you aren\'t tethered to the podium."')
+    st.info("Note: Headset mics require a Tech and a Tech Table station.")
+
+    # 3. Device Location
+    st.subheader("3. Device Location")
+    st.write('**Ask:** "Where would you prefer the presentation device to be located?"')
+    st.markdown("""
+    * **If Podium:** "We will provide power and HDMI for your convenience. Does your device have a standard HDMI port, or should we have an adapter ready for you?"
+    * **If No Preference:** "I recommend our tech table. It maintains the cleanest room aesthetic and ensures our tech can manage transitions seamlessly behind the scenes."
+    """)
+
+    st.info("Note: The tech table provides a central station for active event management—including audio leveling and transition timing—without intruding on the presentation space.")
+
+    # 4. Testing & Media
+    st.subheader("4. Testing & Media")
+    st.write('**Ask:** "Many clients like using their own device to play back media (such as a slide deck or video). If preferred, we can provide a dedicated playback system."')
+    st.markdown("""
+    * **If using Client's Device:** **Say:** "No problem. We’ll just need you and your device here 1 hour before the event so we can verify the signal path together."
+    * **If using House Device:** **Say:** "Great. We just need your media 7 days before the event so we can pre-load and test everything for you."
+    """)
+    st.info("Note: For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.")
