@@ -192,7 +192,7 @@ with tab2:
     # 2. Presenter Location
     st.subheader("2. Presenter Location")
   
-    st.write('**Ask:** "Would your presenter like to move around while speaking? We can provide a wireless headset so you aren\'t tethered to the podium."')
+    st.write('**Ask:** "Would you like to move around while speaking? We can provide a wireless headset so you aren\'t tethered to the podium."')
     st.info("Note: Headset mics require a Tech and a Tech Table station.")
 
     # 3. Device Location
@@ -209,7 +209,7 @@ with tab2:
     st.subheader("4. Testing & Media")
     st.write('**Ask:** "Many clients like using their own device to play back media (such as a slide deck or video). If preferred, we can provide a dedicated playback system."')
     st.markdown("""
-    * **If using Client's Device:** **Say:** "No problem. We’ll just need you and your device here 1 hour before the event so we can verify the signal path together."
-    * **If using House Device:** **Say:** "Great. We just need your media 7 days before the event so we can pre-load and test everything for you."
+    * **If using Client's Device,** **Say:** "No problem. We’ll just need you and your device here 1 hour before the event so we can verify the signal path together."
+    * **If using House Device,** **Say:** "Great. We just need your media 7 days before the event so we can pre-load and test everything for you."
     """)
     st.info("Note: For anything after these windows, our team will provide a best effort integration, but cannot guarantee technical stability.")
