@@ -193,7 +193,7 @@ with tab2:
     st.subheader("2. Presenter Location")
   
     st.write('**Ask:** "Would you like to move around while speaking? We can provide a wireless headset so you aren\'t tethered to the podium."')
-    st.info("Note: Headset mics require a Tech and a Tech Table station.")
+    st.info("Note: Headset mics require a tech and a tech station.")
 
     # 3. Device Location
     st.subheader("3. Device Location")
