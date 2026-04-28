@@ -158,7 +158,7 @@ with tab1:
 
     st.subheader("PEF Data")
     if requires_tech_approval:
-        st.error("### STATUS: PENDING TECH APPROVAL\nEquipment or routing requested (e.g., Second Screen, Lapel Mics). **Call Tech to resolve before finalizing PEF.**")
+        st.error("### STATUS: PENDING AV APPROVAL\nEquipment or routing requested (e.g., Second Screen, Lapel Mics). **Call AV Team to resolve before finalizing PEF.**")
     else:
         st.code("\n".join(lines), language="text")
         st.caption("Copy and paste the block above directly into the PEF.")
@@ -173,7 +173,7 @@ with tab2:
     st.subheader("2. Mic Selection")
     st.write('**Ask:** "What kind of mic(s) would you like?"')
     st.markdown("""
-    * **Handheld:** "Many clients enjoy a handheld on a stand for the flexibility."
+    * **Handheld:** "Many clients enjoy the flexibility of a wireless handheld on a stand."
     * **Headset:** "Some clients enjoy using a headset, as seen in TED Talks."
     * **Podium:** "We also have a gooseneck podium mic, for a refined look."
     """)
@@ -181,7 +181,7 @@ with tab2:
 
     # 3. [span_7](start_span)Device Location[span_7](end_span)
     st.subheader("3. Device Location")
-    st.write('**Ask:** "Where would you prefer the presentation device to be located?"')
+    st.write('**Ask:** "Where would you like the presentation device to be located?"')
     st.markdown("""
     * **If Podium:** "We will provide power and HDMI for your convenience. Does your device have a standard HDMI port, or should we have an adapter ready for you?"
     * **If No Preference:** "I recommend our tech table. It maintains the cleanest room aesthetic and ensures our tech can manage transitions seamlessly behind the scenes."
@@ -190,7 +190,7 @@ with tab2:
 
     # 4. [span_8](start_span)Testing & Media (Updated "Support Approach")[span_8](end_span)
     st.subheader("4. Testing & Media")
-    st.write('**Ask:** "Many clients like using their own device to play back media (such as a slide deck or video). If preferred, we can provide a dedicated playback system."')
+    st.write('**Ask:** "Many clients like using their own device to play back media (such as a slide deck or video). If you prefer, we can provide a dedicated playback system."')
     st.markdown("""
     * **If using Client's Device,** **Say:** "To provide the best support, we ask that you and your device are on-site 1 hour early for a final check of the setup."
     * **If using House Device,** **Say:** "Great. We just need your media 7 days before the event so we can pre-load and test everything for you."
